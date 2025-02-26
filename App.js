@@ -11,7 +11,8 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Cấu hình EJS để render View
-app.set('view engine', 'ejs');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 // Sử dụng route
 app.use('/', userRoutes);
