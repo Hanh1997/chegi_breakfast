@@ -1,3 +1,4 @@
+const path = require("path"); // 🔥 Thêm dòng này để import path
 const express = require('express');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes'); // Import route
@@ -13,9 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 // Cấu hình EJS để render View
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
+app.get("/", (req, res) => {res.render("index");});
 // Sử dụng route
-app.use('/', userRoutes);
 app.use('/api', orderRoutes);
 
 // Chạy server
