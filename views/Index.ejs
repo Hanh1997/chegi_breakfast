@@ -214,7 +214,7 @@
         {
             $("#name").dxTextBox({  label: 'Họ và tên',stylingMode: 'outlined',labelMode: 'static'});
             $("#phone").dxTextBox({  label: 'Số điện thoại',stylingMode: 'outlined',labelMode: 'static'});
-            $("#address").dxTextBox({  label: 'Địa chỉ',value : "35 mạc thái tổ",stylingMode: 'outlined',labelMode: 'static'});
+            $("#address").dxTextBox({  label: 'Địa chỉ',value : "35 Mac Thai To - Yen Hoa - Cau Giay - HN",stylingMode: 'outlined',labelMode: 'static'});
             $("#menu").dxSelectBox({
                 dataSource : lst_menu,
                 displayExpr: "name",
@@ -240,7 +240,18 @@
                 label: 'Công ty',
                 searchEnabled: true,
                 searchMode: "contains",
-                searchExpr: ["code"]
+                searchExpr: ["code"],
+                onValueChanged: function (e) {
+                    if(e.value == "SUNHOUSE")
+                    {
+                       $("#address").dxTextBox("instance").option("value","35 Mac Thai To - Yen Hoa - Cau Giay - HN");
+                    }
+                    if(e.value == "KOBLER")
+                    {
+                        $("#address").dxTextBox("instance").option("value","An Khanh - Hoai Duc - Ha Noi");
+                    }
+                    
+                } 
             });
             
             $("#quantity").dxNumberBox({
@@ -301,21 +312,15 @@
                 obj.menu = $("#menu").dxSelectBox("instance").option("text");
                 obj.quantity = $("#quantity").dxNumberBox("instance").option("value");
                 obj.note = $("#note").dxTextArea("instance").option("value");
-                //let str_order =  `Cty: ${company}| Tên: ${name}| SĐT: ${phone}| Địa chỉ: ${address}| Món: ${menu}| SL :${quantity}| Ghi chú: ${note}`
                 $("#loading-overlay").fadeIn();
                         $.ajax({
-                            url:"/api/send-order", //`https://api.telegram.org/bot${botToken}/sendMessage`,
+                            url:"/api/send-order",
                             method: "POST",
                             contentType: "application/json",
                             data: JSON.stringify(obj),
                             success: function (res) {
-                                if(res.success)
-                                    {
-                                        func.notify('Góp gạo cho Chegi thành công. Xin cảm ơn!','fa fa-smile-o','green')
-                                    }else
-                                    {
-                                        func.notify(`Ui có lỗi rồi ${res.message}`,'fa fa-frown-o','red');
-                                    }
+                                if(res.success){func.notify('Góp gạo cho Chegi thành công. Xin cảm ơn!','fa fa-smile-o','green') }else
+                                    { func.notify(`Ui có lỗi rồi ${res.message}`,'fa fa-frown-o','red');}
                                         $("#loading-overlay").fadeOut();
                                         return true;
                                     },
