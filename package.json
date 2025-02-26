@@ -1,9 +1,9 @@
 {
   "name": "nodeexam",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "App.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node App.js"
   },
   "keywords": [],
   "author": "",
