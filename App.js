@@ -18,6 +18,17 @@ app.get("/", (req, res) => {res.render("Index");});
 // Sử dụng route
 app.use('/api', orderRoutes);
 
+const SERVER_URL = "https://chegi-breakfast.onrender.com/"; // Thay bằng URL thực tế của bạn
+
+// Ping server mỗi 10 phút để giữ nó không bị sleep
+setInterval(async () => {
+  try {
+    const response = await axios.get(SERVER_URL);
+    console.log(`Ping thành công: ${response.status} - Server vẫn chạy!`);
+  } catch (error) {
+    console.error("Ping thất bại:", error.message);
+  }
+}, 600000); // 600,000ms = 10 phút
 // Chạy server
 app.listen(port, () => {
     console.log(`Server đang chạy tại http://localhost:${port}`);
