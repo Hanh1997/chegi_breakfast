@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chegi Breakfast</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.6/css/dx.light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ff9800;
+            padding: 15px 30px;
+            color: white;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .cart {
+            font-size: 20px;
+        }
+        .banner {
+            text-align: center;
+            padding: 50px;
+            background-color: #ffcc80;
+        }
+        .banner button {
+            background-color: #ff5722;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .products {
+            text-align: center;
+            padding: 50px;
+        }
+        .product-list {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .product {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 200px;
+        }
+        .order-form {
+            background-color: white;
+            padding: 50px;
+            text-align: center;
+        }
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            pointer-events: auto;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ff5733;
+            border-right: 4px solid #33ff57;
+            border-bottom: 4px solid #3357ff;
+            border-left: 4px solid #ff33a1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div id="loading">
+            <div class="spinner"></div>
+            <div>Loading...</div>
+        </div>
+    </div>
+    <header>
+        <div class="logo">🍳 Chegi Breakfast</div>
+        <nav>
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link text-white" href="#home">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#menu">Thực đơn</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#about">Giới thiệu</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#contact">Liên hệ</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#order">Đặt hàng</a></li>
+            </ul>
+        </nav>
+        <div class="cart">🛒 <span>0</span></div>
+    </header>
+    
+    <section class="banner">
+        <h1>Bữa sáng ngon, khởi đầu ngày mới tràn đầy năng lượng!</h1>
+        <p>Thực đơn đa dạng, tươi ngon và giàu dinh dưỡng.</p>
+        <button class="btn btn-danger" id="orde_now">Đặt hàng ngay</button>
+    </section>
+    
+    <section id="order" class="order-form container">
+        <div class="form-horizontal" style="padding:10px;">
+            <div class="form-group form-group-sm row">
+                <div class="col-md-3">
+                    <div id="company"></div>
+                 </div>
+                <div class="col-md-6">
+                    <div id="name"></div>
+                 </div>
+                 <div class="col-md-3">
+                     <div id="phone"></div>
+                 </div>
+            </div>
+            <div class="row form-group form-group-sm">
+                <div class="col-md-12">
+                    <div id="address"></div>
+                 </div>
+            </div>
+            <div class="row form-group form-group-sm">
+                <div class="col-md-6">
+                    <div id="menu"></div>
+                </div>
+                <div class="col-md-2">
+                  <div id="quantity"></div>
+                </div>
+                <div class="col-md-2">
+                    <div id="price"></div>
+                </div>
+                <div class="col-md-2">
+                    <div id="totalprice"></div>
+                </div>
+            </div>
+            <div class="row form-group form-group-sm">
+                <div class="col-md-12">
+                    <div id="note"></div>
+                </div>
+            </div>
+            <div class="row form-group form-group-sm">
+                <div class="col-12">
+                    <div class="btn-group" style="float: right;margin-top: 10px;";>
+                        <button type="button"  id="history_order" class="btn btn-info">Lịch sử đặt</button>
+                        <button type="button" id="send_order" class="btn btn-success">Đặt hàng</button>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="text-center bg-dark text-white p-3">
+        <p>📍 Địa chỉ: An Khánh - Hoài Đức - Hà Nội</p>
+        <p>📞 Số điện thoại: 0365997303</p>
+        <p>📧 Email: havytran.hd@gmail.com</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/22.2.6/js/dx.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+</body>
+</html>
+<script>
+    const lst_menu = [{"code":"Egg","name":"Trứng thường","price":4000},{"code":"Balut","name":"Trứng vịt lộn","price":7000},{"code":"Corn","name":"Bắp","price":7000},{"code":"Potato","name":"Khoai lang","price":7000}]
+    const lst_company = [{"code":"SUNHOUSE"},{"code":"KOBLER"}]
+    $(function () {
+        inIt.gen_control();
+    });
+    $(document).ready(function () {
+        var botToken = "6748137268:AAFipIR5uX7T954HfNPuH47Gq2hvv74HP0k";  // Thay bằng Bot Token
+        var chatId = "6184705478";  // Thay bằng Chat ID
+        $("#send_order").click(function () {func.push_telegram(botToken,chatId)});
+        $("#orde_now").click(function() {
+            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        });
+    });
+    let inIt = {
+        gen_control : async () => 
+        {
+            $("#name").dxTextBox({  label: 'Họ và tên',stylingMode: 'outlined',labelMode: 'static'});
+            $("#phone").dxTextBox({  label: 'Số điện thoại',stylingMode: 'outlined',labelMode: 'static'});
+            $("#address").dxTextBox({  label: 'Địa chỉ',value : "35 mạc thái tổ",stylingMode: 'outlined',labelMode: 'static'});
+            $("#menu").dxSelectBox({
+                dataSource : lst_menu,
+                displayExpr: "name",
+                valueExpr: "code",
+                placeholder: "Chọn món...",
+                label: 'Chọn món',
+                searchEnabled: true,
+                searchMode: "contains",
+                searchExpr: ["code", "name"],
+                onValueChanged: function (e) {
+                    let obj_menu = lst_menu.find(c => c.code === e.value);
+                    var qty = $("#quantity").dxNumberBox("instance").option("value");
+                    $("#price").dxNumberBox("instance").option("value",obj_menu.price);
+                    $("#totalprice").dxNumberBox("instance").option("value",qty*obj_menu.price);
+                } 
+            });
+            $("#company").dxSelectBox({
+                dataSource : lst_company,
+                displayExpr: "code",
+                valueExpr: "code",
+                value:"SUNHOUSE",
+                placeholder: "Chọn công cty...",
+                label: 'Công ty',
+                searchEnabled: true,
+                searchMode: "contains",
+                searchExpr: ["code"]
+            });
+            
+            $("#quantity").dxNumberBox({
+                value: 1,
+                min: 1,
+                max: 100,
+                label: 'Số lượng',
+                stylingMode: 'outlined',
+                labelMode: 'static',
+                format: "fixedPoint",
+                onValueChanged: function (e) {
+                    let price = $("#price").dxNumberBox("instance").option("value");
+                    var total_price = e.value * price;
+                    $("#totalprice").dxNumberBox("instance").option("value",total_price);
+                } 
+            });
+
+            $("#price").dxNumberBox({
+                value: 0,
+                label: 'Giá',
+                readOnly:true,
+                stylingMode: 'outlined',
+                labelMode: 'static',
+                format: "fixedPoint"
+            });
+            $("#totalprice").dxNumberBox({
+                value: 0,
+                label: 'Thành tiền',
+                readOnly:true,
+                stylingMode: 'outlined',
+                labelMode: 'static',
+                format: "fixedPoint"
+            });
+
+            $("#note").dxTextArea({  label: 'Ghi chú',height: 90,stylingMode: 'outlined',labelMode: 'static'});
+            $("#menu").dxSelectBox("instance").option("value","Egg");
+        }
+    }
+    let func = {
+        push_telegram : (botToken,chatId) =>
+            {
+                var obj = {};
+                obj.company = $("#company").dxSelectBox("instance").option("value");
+                if(obj.company == null || obj.company == "")
+                {
+                    DevExpress.ui.notify("Vui lòng chọn công ty", "warning", 3000);
+                    return false;
+                }
+                obj.name = $("#name").dxTextBox("instance").option("value");
+                if(obj.name == null || obj.name == "")
+                {
+                    DevExpress.ui.notify("Vui lòng nhập họ tên", "warning", 3000);
+                    return false;
+                }
+                obj.phone = `'${$("#phone").dxTextBox("instance").option("value")}`;
+                obj.price = $("#price").dxNumberBox("instance").option("value");
+                obj.address = $("#address").dxTextBox("instance").option("value");
+                obj.menu = $("#menu").dxSelectBox("instance").option("text");
+                obj.quantity = $("#quantity").dxNumberBox("instance").option("value");
+                obj.note = $("#note").dxTextArea("instance").option("value");
+                //let str_order =  `Cty: ${company}| Tên: ${name}| SĐT: ${phone}| Địa chỉ: ${address}| Món: ${menu}| SL :${quantity}| Ghi chú: ${note}`
+                $("#loading-overlay").fadeIn();
+                        $.ajax({
+                            url:"/api/send-order", //`https://api.telegram.org/bot${botToken}/sendMessage`,
+                            method: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(obj),
+                            success: function (res) {
+                                if(res.success)
+                                    {
+                                        func.notify('Góp gạo cho Chegi thành công. Xin cảm ơn!','fa fa-smile-o','green')
+                                    }else
+                                    {
+                                        func.notify(`Ui có lỗi rồi ${res.message}`,'fa fa-frown-o','red');
+                                    }
+                                        $("#loading-overlay").fadeOut();
+                                        return true;
+                                    },
+                            error: function (error) {
+                                $("#loading-overlay").fadeOut();
+                                func.notify(`Ui có lỗi rồi ${error}`,'fa fa-frown-o','red');
+                                return false;
+                            }
+                        });
+            },
+            notify : (txt_content,icon,type) =>
+            {
+                $.confirm({
+                            title: 'Thông báo',
+                            icon: icon,
+                            theme: 'modern',
+                            closeIcon: true,
+                            animation: 'scale',
+                            type: type,
+                            content: txt_content,
+                            buttons: {
+                                    close: {
+                                        text: 'Đóng',
+                                        btnClass: 'btn-blue',
+                                        action: function(){
+                                            
+                                        }
+                                    }
+                                }
+                        });
+            }
+    } 
+</script>
