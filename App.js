@@ -22,19 +22,12 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Cấu hình EJS để render View
-<<<<<<< HEAD
 app.set('views', path.join(__dirname, 'public', 'views'));
 app.set('view engine', 'ejs');
 
-=======
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-app.get("/", (req, res) => {res.render("Index");});
->>>>>>> 491f16a988d119321e918be063e38867f7d7984a
 // Sử dụng route
 app.use('/api', orderRoutes);
 
-<<<<<<< HEAD
 // Cấu hình session
 app.use(session({
     secret: 'chegi20222@',   // 🔑 Khóa bí mật
@@ -122,19 +115,6 @@ app.get('/order', (req, res) => {
     res.render('order',{lst_cart,total_price}); // about.ejs phải có trong thư mục views
 });
 
-=======
-const SERVER_URL = "https://chegi-breakfast.onrender.com/"; // Thay bằng URL thực tế của bạn
-
-// Ping server mỗi 10 phút để giữ nó không bị sleep
-setInterval(async () => {
-  try {
-    const response = await axios.get(SERVER_URL);
-    console.log(`Ping thành công: ${response.status} - Server vẫn chạy!`);
-  } catch (error) {
-    console.error("Ping thất bại:", error.message);
-  }
-}, 600000); // 600,000ms = 10 phút
->>>>>>> 491f16a988d119321e918be063e38867f7d7984a
 // Chạy server
 app.listen(port, () => {
     console.log(`Server đang chạy tại http://localhost:${port}`);
