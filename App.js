@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes'); // Import route
 const orderRoutes = require('./routes/orderRoutes'); // Import route
-const path = require('path'); 
 const session = require('express-session');
 
 const app = express();
