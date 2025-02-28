@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes'); // Import route
 const orderRoutes = require('./routes/orderRoutes'); // Import route
-const path = require('path'); 
 const session = require('express-session');
 
 const app = express();
@@ -26,6 +25,7 @@ app.set('views', path.join(__dirname, 'public', 'views'));
 app.set('view engine', 'ejs');
 
 // Sử dụng route
+app.use('/', userRoutes);
 app.use('/api', orderRoutes);
 
 // Cấu hình session
