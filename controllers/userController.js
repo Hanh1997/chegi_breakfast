@@ -9,7 +9,7 @@ const lst_food = [
 
 ]
 exports.getHomePage = (req, res) => {
-    res.render('index', {lst_food});
+    res.render('Index', {lst_food});
 };
 
 // Xử lý form gửi dữ liệu AJAX
