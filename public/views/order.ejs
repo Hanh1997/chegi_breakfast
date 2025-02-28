@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/img/logo.png">
+    <title>Chegi BreakFast</title>
+    <meta name="description"
+      content="Món ăn sáng ngon gồm trứng gà, trứng vịt lộn, bắp ngô và khoai lang" />
+    <meta name="author" content="Chegi BreakFast" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+      <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.6/css/dx.light.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+       .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn-submit {
+            background: orange;
+            color: white;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+        }
+        .btn-submit:hover {
+            background: darkorange;
+        }
+        .summary-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            pointer-events: auto;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ff5733;
+            border-right: 4px solid #33ff57;
+            border-bottom: 4px solid #3357ff;
+            border-left: 4px solid #ff33a1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+  </head>
+  <body>
+    <div id="loading-overlay">
+      <div id="loading">
+          <div class="spinner"></div>
+          <div>Loading...</div>
+      </div>
+  </div>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg" style="padding: 10px;">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/" style="padding: 0px;">
+              <img src="/img/logo.png"
+                style="max-width: 60px;height: auto;border-radius: 50% 50%;" />
+              <small>Chegi BreakFast</small>
+            </a>
+            <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                  <a class="nav-link active" href="/">Trang Chủ</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Thực Đơn</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Về Chúng Tôi</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#contact">Liên Hệ</a>
+                </li>
+              </ul>
+
+              <!-- <button class="btn btn-primary">Đặt Hàng Ngay</button> -->
+              <div class="shop-cart">
+                <a class="nav-link" href="/my-shop-cart">
+                  <i class="fa-solid fa-cart-shopping"
+                    style="font-size: xx-large;"></i>
+                  <span
+                    class="position-absolute translate-middle badge rounded-pill bg-danger"
+                    id="count_cart">0</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="row">
+                <!-- Thông tin đặt hàng -->
+                <div class="col-md-8">
+                    <div class="card p-4">
+                        <h4 class="mb-3">
+                            <i class="fas fa-shopping-bag text-warning"></i> Thông tin đặt hàng
+                        </h4>
+                        <div class="form-order">
+                              <div class="mb-3">
+                                <label class="form-label">Công ty</label>
+                                <select class="form-select" id="txt_company">
+                                    <option value="Sunhouse">Sunhouse</option>
+                                    <option value="Kobler">Kobler</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên *</label>
+                                <input type="text" class="form-control" id="txt_name" placeholder="Nhập họ và tên">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại *</label>
+                                <input type="text" class="form-control" id="txt_phone" placeholder="Nhập số điện thoại">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ giao hàng *</label>
+                                <textarea class="form-control" rows="3" id="txt_address" placeholder="Nhập địa chỉ"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ghi chú (tùy chọn)</label>
+                                <textarea class="form-control" rows="2" id="txt_note" placeholder="Nhập ghi chú"></textarea>
+                            </div>
+                            <button class="btn btn-success w-100" id="btn-order">Đặt hàng</button>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Tóm tắt đơn hàng -->
+                <div class="col-md-4">
+                    <div class="card p-4" id="info-pay">
+                        <h5 class="mb-3 text-center">Tóm tắt đơn hàng</h5>
+                        <%lst_cart.forEach(item => { %>
+                          <div class="d-flex align-items-center border-bottom pb-2 mb-2">
+                            <img src='<%= item.imgsrc%>' width="50px" height="50px" alt="Trứng gà">
+                            <div class="ms-3">
+                              <%= item.itemname%> <br>
+                                <small class="text-muted"><%=item.price%> x <%=item.quantity%> đ</small>
+                            </div>
+                            <div class="ms-auto fw-bold"><%= item.price* item.quantity %></div>
+                        </div>
+                        <% })%>
+                        <div class="d-flex justify-content-between mt-3">
+                            <span>Tạm tính:</span>
+                            <span class="fw-bold"><%=total_price%>đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Phí vận chuyển:</span>
+                            <span class="fw-bold text-success">Miễn phí</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fs-5 fw-bold">
+                            <span>Tổng cộng:</span>
+                            <span><%=total_price%>đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-col">
+            <div class="footer-logo">Chegi BreakFast</div>
+            <p class="footer-desc">Cung cấp bữa sáng tươi ngon, đầy đủ
+              dinh
+              dưỡng mỗi ngày. Chúng tôi cam kết mang đến cho bạn những
+              trải
+              nghiệm ẩm thực tuyệt vời nhất.</p>
+            <div class="social-links">
+              <a href="#" class="social-icon"><i
+                  class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon"><i
+                  class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon"><i
+                  class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i
+                  class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-col">
+            <h4 class="footer-title">Thực Đơn</h4>
+            <ul class="footer-links">
+              <li><a href="#">Trứng Gà</a></li>
+              <li><a href="#">Trứng Vịt Lộn</a></li>
+              <li><a href="#">Bắp Ngô</a></li>
+              <li><a href="#">Khoai Lang</a></li>
+              <li><a href="#">Combo Ăn Sáng</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-col">
+            <h4 class="footer-title">Hỗ Trợ</h4>
+            <ul class="footer-links">
+              <li><a href="#">Chính Sách Giao Hàng</a></li>
+              <li><a href="#">Hình Thức Thanh Toán</a></li>
+              <li><a href="#">Câu Hỏi Thường Gặp</a></li>
+              <li><a href="#">Điều Khoản Dịch Vụ</a></li>
+              <li><a href="#">Chính Sách Bảo Mật</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-col">
+            <h4 class="footer-title">Liên Hệ</h4>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt contact-icon"></i>
+              <p class="contact-text">Đường Cộng Hòa - An Khánh - Hoài
+                Đức
+                -
+                Hà
+                Nội</p>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone-alt contact-icon"></i>
+              <p class="contact-text">0365997303</p>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope contact-icon"></i>
+              <p class="contact-text">hanh1997haui@gmail.com</p>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock contact-icon"></i>
+              <p class="contact-text">6:00 - 11:00 Sáng / Hàng Ngày</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          <p>&copy; 2025 Chegi BreakFast. Tất cả quyền được bảo lưu.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/22.2.6/js/dx.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Custom JS -->
+    <script>
+      var lst_cart = [];
+      $(document).ready(() => {
+          f_order.func_get_list_data_card();
+          $("#btn-order").on("click",() => {
+            f_order.func_save_order();
+          });
+      });
+      let f_order = {
+            func_save_order : () =>
+                {
+                  
+                  var obj = {};
+                    obj.company = $("#txt_company").val();
+                    if(obj.company == null || obj.company == "")
+                    {
+                        DevExpress.ui.notify("Vui lòng chọn công ty", "warning", 3000);
+                        return false;
+                    }
+                    obj.name = $("#txt_name").val()
+                    if(obj.name == null || obj.name == "")
+                    {
+                        DevExpress.ui.notify("Vui lòng nhập họ tên", "warning", 3000);
+                        return false;
+                    }
+                    obj.phone = $("#txt_phone").val()
+                    obj.address =$("#txt_address").val(); 
+                    obj.note =$("#txt_note").val();
+
+                  $.each(lst_cart,(index,item) => {
+                      item.company = obj.company;
+                      item.name = obj.name;
+                      item.phone = obj.phone;
+                      item.address = obj.address;
+                      item.note = obj.note;
+                  });
+                    $("#loading-overlay").fadeIn();
+                            $.ajax({
+                                url:"/api/send-order",
+                                method: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify(lst_cart),
+                                success: function (res) {
+                                    if(res.success)
+                                    {
+                                      f_order.notify('Góp gạo cho Chegi thành công. Xin cảm ơn!','fa fa-smile-o','green')
+                                    }else{ f_order.notify(`Ui có lỗi rồi ${res.message}`,'fa fa-frown-o','red');}
+                                        $("#loading-overlay").fadeOut();
+                                  },
+                                error: function (error) {
+                                    $("#loading-overlay").fadeOut();
+                                    f_order.notify(`Ui có lỗi rồi ${error}`,'fa fa-frown-o','red');
+                                    return false;
+                                }
+                            });
+                },
+            func_get_list_data_card : () => 
+            {
+              $.ajax({
+                  url: "/get-cart", // API lấy danh sách món ăn
+                  method: "GET",
+                  dataType: "json",
+                  success: function (res) {
+                    lst_cart = res.cart;
+                      var total_item = func.reduceSum(res.cart,"quantity");
+                      $("#count_cart").html(total_item);
+                  },
+                  error: function (xhr, status, error) {
+                      console.error("Lỗi khi lấy dữ liệu:", error);
+                      return null;
+                  }
+              });
+            },
+            notify : (txt_content,icon,type) =>
+            {
+                $.confirm({
+                            title: 'Thông báo',
+                            icon: icon,
+                            theme: 'modern',
+                            closeIcon: true,
+                            animation: 'scale',
+                            type: type,
+                            content: txt_content,
+                            buttons: {
+                                    close: {
+                                        text: 'Đóng',
+                                        btnClass: 'btn-blue',
+                                        action: function(){
+                                          window.location.href = "/";
+                                        }
+                                    }
+                                }
+                        });
+            }
+        }
+    </script>
+  </body>
+</html>
