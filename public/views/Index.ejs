@@ -174,10 +174,8 @@
 
         <div class="product-filter">
           <button class="filter-btn active">Tất Cả</button>
-          <button class="filter-btn">Trứng Gà</button>
-          <button class="filter-btn">Trứng Vịt Lộn</button>
-          <button class="filter-btn">Bắp Ngô</button>
-          <button class="filter-btn">Khoai Lang</button>
+          <button class="filter-btn">Đồ ăn</button>
+          <button class="filter-btn">Đồ uống</button>
         </div>
 
         <div class="row">
@@ -187,13 +185,13 @@
               <div class="product-image"
                 style="background-image: url('<%= item.imgsrc %>');background-size: cover;background-position: center;">
                 <!-- <i class="fas fa-egg product-icon"></i> -->
-                <span class="product-badge">Bán chạy</span>
+                <!-- <span class="product-badge">Bán chạy</span> -->
               </div>
               <div class="product-content">
                 <h3 class="product-title"><%= item.itemname %></h3>
                 <p class="product-desc"><%= item.shortdescription %></p>
                 <div class="product-bottom">
-                  <div class="product-price"><%= item.price %>đ</div>
+                  <div class="product-price"><%= item.price.toLocaleString('en-US') %>đ</div>
                   <button class="add-to-cart"
                     onclick="func_add_to_cart('<%= item.id %>')">
                     <i class="fas fa-shopping-cart"></i>
@@ -203,7 +201,7 @@
             </div>
           </div>
           <% }) %>
-          <div class="col-lg-3 col-md-6">
+          <!-- <div class="col-lg-3 col-md-6">
             <div class="product-card">
               <div class="product-image">
                 <i class="fas fa-egg product-icon"></i>
@@ -277,7 +275,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>

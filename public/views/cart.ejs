@@ -202,51 +202,57 @@
                 <div class="lst-item-cart" id="lst-item-cart">
                   <div class="title-cart"
                     style="display: flex;justify-content: space-between">
-                    <b>Sản phẩm(<%= lst_cart.length%>)</b>
+                    <b>Sản phẩm(<%= lst_cart == null ? 0 : lst_cart.length%>)</b>
                     <small class="text-danger">Xóa tất cả</small>
                   </div>
                   <hr>
-                  <%lst_cart.forEach(item => { %>
-                    <div class="row">
-                      <div class="row-item" style="padding: 10px;display: flex;">
-                        <div class="col-md-2">
-                          <div class="item-img">
-                            <img src="<%= item.imgsrc %>"
-                              style="max-width: 100px; height: auto;border-radius: 10px 10px;" />
+                  <% if (lst_cart && lst_cart.length > 0) { %>
+                    <% lst_cart.forEach(item => { %>
+                      <div class="row">
+                        <div class="row-item" style="padding: 10px;display: flex;">
+                          <div class="col-md-2">
+                            <div class="item-img">
+                              <img src="<%= item.imgsrc %>"
+                                style="max-width: 100px; height: auto;border-radius: 10px 10px;" />
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-md-8">
-                          <div class="item-name">
-                            <div class="info-item">
-                              <div class="item-name">
-                                <span><b><%= item.itemname %></b></span>
-                              </div>
-                              <div class="item-price">
-                                <small><%= item.price %>đ</small> <!-- Sửa lại thẻ đóng -->
-                              </div>
-                              <div class="quantity-container">
-                                <div class="quantity-control">
-                                  <button onclick="func_delete_item_card('<%= item.id %>',1)">-</button>
-                                  <span><%= item.quantity %></span>
-                                  <button onclick="func_delete_item_card('<%= item.id %>',-1)">+</button>
+                          <div class="col-md-8">
+                            <div class="item-name">
+                              <div class="info-item">
+                                <div class="item-name">
+                                  <span><b><%= item.itemname %></b></span>
                                 </div>
-                                <button class="remove-btn" onclick="func_delete_item_card('<%=item.id%>','<%= item.quantity %>')">
-                                  <i class="fa fa-trash"></i> Xóa
-                                </button>
+                                <div class="item-price">
+                                  <small><%= item.price.toLocaleString('en-US') %>đ</small>
+                                </div>
+                                <div class="quantity-container">
+                                  <div class="quantity-control">
+                                    <button onclick="func_delete_item_card('<%= item.id %>',1)">-</button>
+                                    <span><%= item.quantity.toLocaleString('en-US') %></span>
+                                    <button onclick="func_delete_item_card('<%= item.id %>',-1)">+</button>
+                                  </div>
+                                  <button class="remove-btn" onclick="func_delete_item_card('<%= item.id %>','<%= item.quantity %>')">
+                                    <i class="fa fa-trash"></i> Xóa
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="col-md-2"> <!-- Sửa đúng vị trí cột 2 -->
-                          <div class="total-price"
-                            style="text-align: end;line-height: 6;">
-                            <span><b><%= item.quantity * item.price %>đ</b></span>
+                          <div class="col-md-2">
+                            <div class="total-price" style="text-align: end;line-height: 6;">
+                              <span><b><%= (item.quantity * item.price).toLocaleString('en-US') %>đ</b></span>
+                            </div>
                           </div>
                         </div>
+                        <hr>
                       </div>
-                      <hr>
+                    <% }) %>
+                  <% } else { %>
+                    <div class="empty-cart-message">
+                      <p>Giỏ hàng trống</p>
                     </div>
-                  <% }) %>
+                  <% } %>
+                  
                 </div>
               </div>
             </div>
@@ -258,7 +264,7 @@
                     <hr>
                     <div class="order-row tem-calculated">
                       <span>Tạm tính</span>
-                      <span><%=total_price%>đ</span>
+                      <span><%=total_price.toLocaleString('en-US')%>đ</span>
                     </div>
                     <div class="order-row">
                       <span>Phí vận chuyển</span>
@@ -267,7 +273,7 @@
                     <hr>
                     <div class="order-row total">
                       <span>Tổng cộng</span>
-                      <span><%=total_price%>đ</span>
+                      <span><%=total_price.toLocaleString('en-US')%>đ</span>
                     </div>
                     <a href="/order" class="checkout-btn">Tiến hành thanh toán</a>
                     <a href="/" class="continue-shopping">❮ Tiếp tục mua sắm</a>
